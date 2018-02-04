@@ -44,4 +44,9 @@ public interface BoardDAO {
 	
 	//특정게시물의 첨부파일을 시간 순서대로 가져오는 SQL문
 	public List<String> getAttach(Integer bno)throws Exception;
+	
+	//게시물 수정 (기존의 첨부파일을 삭제하고 새롭게 추가)
+	public void deleteAttach(Integer bno)throws Exception;
+	
+	public void replaceAttach(String fullName, Integer bno)throws Exception;
 }

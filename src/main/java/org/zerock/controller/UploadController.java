@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.zerock.util.MediaUtils;
@@ -69,11 +70,11 @@ public class UploadController {
 		
 	}
 	
-	// 실제 파일 업도드 처리
+	// �떎�젣 �뙆�씪 �뾽�룄�뱶 泥섎━
 	@ResponseBody
 	@RequestMapping(value = "/uploadAjax",
 					method = RequestMethod.POST,
-					produces = "text/plain;charset=UTF-8") //produces속성 한글 전송설정
+					produces = "text/plain;charset=UTF-8") //produces�냽�꽦 �븳湲� �쟾�넚�꽕�젙
 	public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception{
 		
 		logger.info("originalName: " + file.getOriginalFilename());
@@ -87,8 +88,8 @@ public class UploadController {
 					HttpStatus.CREATED);
 	}
 	
-	@ResponseBody //byte[]데이터가 그대로 전송될 것
-	@RequestMapping("/displayFile") //파라미터로 브라우저에서 전송받기를 원하는 파일의 이름을 받는다.
+	@ResponseBody //byte[]�뜲�씠�꽣媛� 洹몃�濡� �쟾�넚�맆 寃�
+	@RequestMapping("/displayFile") //�뙆�씪誘명꽣濡� 釉뚮씪�슦���뿉�꽌 �쟾�넚諛쏄린瑜� �썝�븯�뒗 �뙆�씪�쓽 �씠由꾩쓣 諛쏅뒗�떎.
 	public ResponseEntity<byte[]> displayFile(String fileName)throws Exception{
 		
 		InputStream in = null;
@@ -148,6 +149,31 @@ public class UploadController {
 		
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/deleteAllFiles", method=RequestMethod.POST)
+	public ResponseEntity<String> deleteFile(@RequestParam("files[]") String[] files){
+		logger.info("delete all files: "+files);
+		
+		if(files == null || files.length ==0){
+			return new ResponseEntity<String>("deleted", HttpStatus.OK);
+		}
+		
+		for(String fileName:files){
+			String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
+			
+			MediaType mType=MediaUtils.getMediaType(formatName);
+			
+			if(mType != null){
+				String front = fileName.substring(0, 12);
+				String end = fileName.substring(14);
+				new File(uploadPath + (front+end).replace('/', File.separatorChar)).delete();
+			}
+			new File(uploadPath+fileName.replace('/', File.separatorChar)).delete();
+		}
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+	}
+	
 	
 	
 }

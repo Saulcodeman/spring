@@ -144,4 +144,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getAttach" resultType="string">
 	select fullName from tbl_attach where bno = #{bno} order by regdate
 	</select>
+	
+	<!-- 게시물 수정 ,삭제 파일업로드 -->
+	<delete id="deleteAttach">
+	delete from tbl_attach where bno = #{bno}
+	</delete>
+	
+	<insert id="replaceAttach">
+	insert into tbl_attach(fullName, bno) values (#{fullName}, #{bno})
+	</insert>
 </mapper>
