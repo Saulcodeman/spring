@@ -30,7 +30,8 @@
 		<div class="form-group">
 			<label for="exampleInputEmail1">Writer</label> 
 			<input type="text"
-				name="writer" class="form-control" placeholder="Enter Writer">
+				name="writer" class="form-control" 
+			value='${login.uid }' readonly>
 		</div>
 		<div class="form-group">
 			<label for="exampleInputEmail1">File DROP here</label>
@@ -72,6 +73,26 @@ margin:auto;
 	</div>
 </li>
 </script>
+<script id="template" type="text/x-handlebars-template">
+	{{#each .}}
+		<li class="replyLi" data-rno={{rno}}>
+			<i class="fa fa-comments bg-blue"></i>
+			<div class="timeline-item">
+				<span class="time">
+					<i class="fa fa-clock-o"></i>{{prettifyDate regdate}}
+				</span>
+				<h3 class="timeline-header"><string>{{rno}}</strong>
+-{{replyer}}</h3>
+				<div class="timeline-body">{{replytext}}</div>
+				<div class="timeline-footer">
+				{{#eqReplyer replyer}}
+					<a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modifyModal">Modify</a>
+				{{/eqReplyer}}
+				</div>
+			</div>
+		</li>
+	{{/each}}
+</script>
 
 <script>
 	var template = Handlebars.compile($("#template").html());
@@ -106,6 +127,14 @@ margin:auto;
 				$(".uploadedList").append(html);
 			}
 		});
+	});
+	
+	Handlebars.registerHelper("eqReplyer", function(replyer, block){
+		var accum = '';
+		if(replyer == '${login.uid}'){
+			accum += block.fn();
+		}
+		return accum;
 	});
 </script>
 

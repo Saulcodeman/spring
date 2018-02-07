@@ -73,17 +73,35 @@
 				<div class="box=header">
 					<h3 class="box-title">ADD NEW REPLY</h3>
 				</div>
+				
+				<c:if test="${not empty login }">
 				<div class="box-body">
-					<label for="newReplyWriter">Writer</label>
+					<label for="exampleInputEmail1">Writer</label>
+					<input class="form-control" type="text" placeholder="USER ID"
+						id="newReplyWriter" value="${login.uid }" readonly="readonly">
+					<label for="exampleInputEmail1">ReplyText</label>
+					<input class="form-control" type="text"
+						placeholder="REPLY TEXT" id="newReplyText">
+				
+		<!--  			<label for="newReplyWriter">Writer</label>
 						<input class="form-control" type="text" placeholder="USER ID"
 						id="newReplyWriter"><label for="newReplyText">ReplyText</label>
 						<input class="form-control" type="text"
-						placeholder="REPLY TEXT" id="newReplyText">
+						placeholder="REPLY TEXT" id="newReplyText">  -->
 				</div>
+				
 				<!-- box body -->
 				<div class="box-footer">
 					<button type="submit" class="btn btn-primary" id="replyAddBtn">ADD REPLY</button>
 				</div>
+				</c:if>
+				
+				<c:if test="${empty login }">
+					<div class="box-body">
+						<div><a href="javascript:goLogin();">Login Please</a></div>
+					</div>
+				</c:if>
+				
 			</div>
 		</div>
 	</div>
@@ -126,34 +144,18 @@
 	        <p><input type="text" id="replytext" class="form-control"></p>
 	      </div>
 	      <div class="modal-footer">
+	      <ul class="mailbox-attachments clearfix uploadedList"></ul>
+	      <c:if test="${login.uid == boardVO.writer }">
 	        <button type="button" class="btn btn-info" id="replyModBtn">Modify</button>
 	        <button type="button" class="btn btn-danger" id="replyDelBtn">DELETE</button>
+	      </c:if>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>      
 	
-	<!-- handlebars 템플릿 코드
-	<script id="template" type="text/x-handlebars-template">
-	{{#each .}}
-	<li class="replyLi" data-rno={{rno}}>
-	<i class="fa fa-comments bg-blue"></i>
-		<div class="timeline-item">
-			<span class="time">
-				<i class="fa fa-clock-o"></i>{{prettifyDate regdate}} 
-			</span>
-			<h3 class="timeline-header"><strong>{{rno}}</strong> -{{replyer}}</h3>
-			<div class="timeline-body">{{replytext}} </div>
-				<div class="timeline-footer">
-					<a class="btn-primary btn-xs"
-					data-toggle="modal" data-target='#modifyModal">Modify</a>
-				</div>
-			</div>
-	</li>
-	{{/each}}
-	</script>
-	 -->
+	
 	<script id="template" type="text/x-handlebars-template">
 	{{#each .}}
 		<li class="replyLi" data-rno={{rno}}>
